@@ -3,7 +3,6 @@ package com.book.network.modal;
 import java.util.Objects;
 import java.util.Set;
 
-import com.book.network.DTO.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -18,7 +17,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,8 +68,10 @@ public class AuthRoutes {
 	@JsonBackReference
 	private AuthRoutes parentAuthRoute;
 	
-	@Transient
-	private Set<Role> roles;
+	@OneToMany(targetEntity = Roles.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "fk_role")
+	@JsonManagedReference
+	private Set<Roles> roles;
 
 	@Override
 	public int hashCode() {

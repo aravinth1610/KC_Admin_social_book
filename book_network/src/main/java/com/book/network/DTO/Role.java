@@ -7,12 +7,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
-@Data
-public class Role {
-
-	private String id;
-	private String name;
-	private String desc;
-
-	private List<AttributeDTO> attributes;
-}
+//@Data
+//public class Role {
+//
+//	private String id;
+//	private String name;
+//	private String desc;
+//
+//	private List<AttributeDTO> attributes;
+//}

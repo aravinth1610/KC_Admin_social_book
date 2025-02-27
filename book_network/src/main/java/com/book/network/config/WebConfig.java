@@ -5,17 +5,24 @@ import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.book.network.modal.Roles;
+import com.book.network.services.AuthMenuServices;
+
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.HttpMethod;
+import lombok.AllArgsConstructor;
 
 @Configuration
+@AllArgsConstructor
 public class WebConfig {
+	
+	private final AuthMenuServices authMenuServices;
 	
 	
     @Bean
@@ -35,17 +42,26 @@ public class WebConfig {
             }
         }))
             .csrf((csrf) -> csrf.disable())
-		.authorizeHttpRequests(auth -> {
-//				this.roleBase.getPermissions().forEach(permission -> {
-//				 try {
-//				auth.requestMatchers(HttpMethod.valueOf(permission.getMethod()), permission.getEndpoints())
-//						.hasAnyAuthority(permission.getRoles().split(","));
-//				
-//				 } catch (Exception e) {
-//                        throw new RuntimeException("Failed to configure authorization", e);
-//                    }
-//			});
-//			 auth.requestMatchers(AppConstant.PUBLIC_URLS).permitAll().anyRequest().authenticated();
+            .authorizeHttpRequests(auth -> {
+//                try {
+//                    this.authMenuServices.getSecurityConfigPermission().forEach(permission -> {
+//                        if (permission.getCanActivate() != null) {
+//                            try { 
+//                            	String[] authorities = permission.getRoles().stream().map(Roles::getName).toArray(String[]::new);
+//                                HttpMethod method = HttpMethod.valueOf(permission.getPermission()); 
+//                                auth.requestMatchers(method, permission.getApiEndPoint()).hasAnyAuthority(authorities); 
+//                            } catch (IllegalArgumentException e) {
+//                                throw new RuntimeException("Invalid HTTP method: " + permission.getPermission(), e);
+//                            }
+//                        } else {
+//                            auth.requestMatchers(permission.getApiEndPoint()).permitAll();
+//                        }
+//                    });
+//                } catch (Exception e) {
+//                    throw new RuntimeException("Failed to configure authorization", e);
+//                }
+//                auth.anyRequest().authenticated(); // Ensure this is applied only once
+
 //--------------------------------------------------------------------------------------------------------------------				
 				auth
 						.requestMatchers( "/user","/authmenu/**","/realm/role/**").permitAll().anyRequest().authenticated();

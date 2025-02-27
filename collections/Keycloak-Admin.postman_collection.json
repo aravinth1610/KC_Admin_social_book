@@ -1,0 +1,458 @@
+{
+	"info": {
+		"_postman_id": "e523bb28-7523-4590-a6b9-2d25604d64d9",
+		"name": "Keycloak-Admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22303957"
+	},
+	"item": [
+		{
+			"name": "Create-User",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJLQjR3c19zeFd0aVBMank4TVE5WVJFNTRZdXVuS3YwRXAwWHBBdzBhZ0lVIn0.eyJleHAiOjE3Mzk4ODUwODUsImlhdCI6MTczOTg0OTA4NSwianRpIjoiZTY5OWM1ZDgtNGVkYi00ZjJhLTg2ODYtYjE3MGNhNThmMmRkIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9uZXR3b3JrIiwic3ViIjoiOGNhOTZjMTYtY2FkNi00NWE2LTkxNmEtZGJjZDViMzI0NzQ1IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoibmV0d29yay1kZXYiLCJhY3IiOiIxIiwic2NvcGUiOiJlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50SG9zdCI6IjE3Mi4xNy4wLjEiLCJjbGllbnRBZGRyZXNzIjoiMTcyLjE3LjAuMSIsImNsaWVudF9pZCI6Im5ldHdvcmstZGV2In0.BGic0CTApjXhGeTu7PGj2OkXoVHQuCqXPu5FsK5MeiKs8GYnpjgat8aMyxpauOVfeZ8HNfT_PRldkqAUXrES0EOJHHcQ1q__mZJozN20MLoKfnALaHI3qC1NcCiBnOA0nJc0rSbMsH-bzKlVIBHmtkrAp9OnWkh96KqN1lsymjqI-z7DtjEl_k0tRNkfxu5HkKrVZvGvkcjHqpwbTVo20JmugPfL1WohP9lI5Z8hktrGgY-vlfwywr-pnBxqiGQOx4XNcRNVi5JEYvNt-s_aL0yNe_csbYnr9Y9DtvnJAp-vlTIISQwA8BdAfw61mMA1bKBP_Bl87i57i6nGGHCLQw",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"5\",\n    \"firstName\":\"ram\",\n    \"lastName\":\"r\",\n    \"email\":\"ram@gmail.com\",\n    \"userName\":\"ram\",\n    \"password\":\"12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/user/eb1fbddc-a6a5-45ac-a464-8a47d5f61c58",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"eb1fbddc-a6a5-45ac-a464-8a47d5f61c58"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListOfUsers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/user",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete-User",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/user/bc7ed7ed-ddd2-4f93-bf41-2fea9d2eaa34",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"bc7ed7ed-ddd2-4f93-bf41-2fea9d2eaa34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUser",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\":\"firstNameH\",\n    \"lastName\":\"lastdH\",\n    \"email\":\"raj@gmail.com\",\n    \"userName\":\"firstH\",\n    \"password\":\"12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/user/eb1fbddc-a6a5-45ac-a464-8a47d5f61c58",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"eb1fbddc-a6a5-45ac-a464-8a47d5f61c58"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create-User-Role",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/user/eb1fbddc-a6a5-45ac-a464-8a47d5f61c58/role?role=USER",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"eb1fbddc-a6a5-45ac-a464-8a47d5f61c58",
+						"role"
+					],
+					"query": [
+						{
+							"key": "role",
+							"value": "USER"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LisrOf-user-Roles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/user/eb1fbddc-a6a5-45ac-a464-8a47d5f61c58/list-role",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"eb1fbddc-a6a5-45ac-a464-8a47d5f61c58",
+						"list-role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create-realm-roles",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"ADMIN\",\n  \"desc\": \"Administrator role\",\n  \"attributes\": [\n    {\n      \"key\": \"permission\",\n      \"value\": [\"READ\", \"WRITE\"]\n    },\n    {\n      \"key\": \"department\",\n      \"value\": [\"IT\"]\n    }\n  ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/realm/role",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realm",
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListOfRealmRoles",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/realm/roles",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realm",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRealmByRoleName",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/realm/role/ADMIN",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realm",
+						"role",
+						"ADMIN"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateRealmRoles",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"MANAGERR\",\n    \"desc\":\"man\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/realm/role/MANAGER",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realm",
+						"role",
+						"MANAGER"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteRalmRole",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/realm/role/MANAGERR",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"realm",
+						"role",
+						"MANAGERR"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AuthMenu",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    [\n    {\n        \"path\": \"CaseData\",\n        \"component\": \"CaseDataComp\",\n        \"canActivate\": \"authGuard\",\n        \"apiEndPoint\":\"casedata/\",\n        \"permission\":\"POST\",\n        \"childrenAuthRoute\": [\n            {\n                \"path\": \"casedata/:id\",\n                \"component\": \"CaseDataSubComponent\",\n                \"apiEndPoint\":\"casedata/{id}\",\n                 \"canActivate\": \"authGuard\",\n                 \"permission\":\"GET\",\n                \"roles\": [\n                    {\n                        \"name\": \"GUST\"\n                    }\n                ]\n            }\n        ],\n        \"roles\": [\n            {\n                \"name\": \"ADMIN\"\n            },\n             {\n                \"name\": \"USER\"\n            }\n        ]\n    },\n       {\n        \"path\": \"authmenu\",\n        \"component\": \"authmenuComp\",\n        \"apiEndPoint\":\"authmenu\",\n        \"permission\":\"GET\"\n       \n    }\n\n]\n ]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/authmenu",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"authmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TestingKC-Book",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ2QXJoQWxGWkVzeWMzY1pzNFFUTTNQdVh5NWZ1TU1QN3RVR1pNZFhScDBRIn0.eyJleHAiOjE3NDAyOTY0NzQsImlhdCI6MTc0MDI5NjE3NCwianRpIjoiZDkxNGFhYjYtNzU0ZS00NzViLTg1MDMtMTljOGE1MTA3MzBiIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDkwL3JlYWxtcy9uZXR3b3JrIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZnJudC1uZXR3b3JrIiwic2lkIjoiMTg0OWYyZGYtMGY0NC00ZmQ5LWEwZTMtNDE0ZTliYmYwZjg3IiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwic2NvcGUiOiIifQ.ha7pgjtmDHaGOFPRTbW18CvOuDeyk1DIwe_T4I5tNu2Vye4tPYTslLekaYEpbYtGbxpcSPaNzXdJ9yHxDklmK7x4iWMiuPEDWVWZIzAugclsAiZ4XieR9K8_GHMoIu0R-hieTQGigY5_y7o7BfjuIG-CN3I5oZFfi7lu6ogXC6nPCqIfWntkHkGkcoA6MkUs-4nt98su3dg3mf_VvYy_dN86ZEhtj-YDthL5Ug9VgaYPjqLSNf4lo24W6-J3L7pKYyXxHOuoZXCgSEJ3tYWQ8aJ1d4gvW8JArWFuvz75cEOQzHNWslWtKsZtLEUk66PUoe0IN-GMRw8ctoFRQOG1aw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/books",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "KeyclockTest_Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "frnt-network",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "j6mfRsC1QTClu5cEv3XF78YMneQ4h1js",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "username",
+							"value": "ram",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "email",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9090/realms/network/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"realms",
+						"network",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllMenuDatas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/authmenu",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"authmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AuthMenuWebConfigAPI",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/authmenu/web",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"authmenu",
+						"web"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

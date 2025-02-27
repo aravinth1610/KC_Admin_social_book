@@ -3,7 +3,6 @@ package com.book.network.services;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.book.network.DTO.AttributeDTO;
-import com.book.network.DTO.Role;
+import com.book.network.modal.Roles;
 
 @Service
 public class RoleKcServices {
@@ -31,7 +30,7 @@ public class RoleKcServices {
 		this.keycloak = keycloak;
 	}
 
-	public void createRole(Role role) {
+	public void createRole(Roles role) {
 		RoleRepresentation roleRep = mapRoleRep(role);
 		getRolesResource().create(roleRep);
 	}
@@ -44,7 +43,7 @@ public class RoleKcServices {
 		return getRolesResource().list();
 	}
 
-	public void updateRole(String roleName,Role role) {
+	public void updateRole(String roleName,Roles role) {
 		RoleRepresentation roleRep = mapRoleRep(role);
 		getRolesResource().get(roleName).update(roleRep);
 	}
@@ -88,14 +87,14 @@ public class RoleKcServices {
 		return realmResourse.roles();
 	}
 
-	private Role mapRole(RoleRepresentation roleRep) {
-		Role role = new Role();
-		role.setId(roleRep.getId());
+	private Roles mapRole(RoleRepresentation roleRep) {
+		Roles role = new Roles();
+		role.setPkRoleId(Long.valueOf(roleRep.getId()));
 		role.setName(roleRep.getName());
 		return role;
 	}
 
-	private RoleRepresentation mapRoleRep(Role role) {
+	private RoleRepresentation mapRoleRep(Roles role) {
 	    RoleRepresentation roleRep = new RoleRepresentation();
 	    roleRep.setName(role.getName());
 	    roleRep.setDescription(role.getDesc());
