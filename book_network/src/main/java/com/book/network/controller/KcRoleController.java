@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.book.network.DTO.Role;
+import com.book.network.modal.Roles;
 import com.book.network.services.RoleKcServices;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class KcRoleController {
 	private final RoleKcServices serv;
 	
 	@PostMapping("/realm/role")
-	private final void createRole(@RequestBody Role role) {
+	private final void createRole(@RequestBody Roles role) {
 		System.out.println(role);
 		 serv.createRole(role);
 	}
@@ -40,7 +40,7 @@ public class KcRoleController {
 	}
 	
 	@PutMapping("/realm/role/{roleName}")
-	public void updateRole(@PathVariable String roleName, @RequestBody Role role) {
+	public void updateRole(@PathVariable String roleName, @RequestBody Roles role) {
 		serv.updateRole(roleName, role);
 	}
 	
