@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.book.network.DTO.User;
 
 import jakarta.ws.rs.core.Response;
+import lombok.NoArgsConstructor;
 
 @Service
 public class UserKcServices {
@@ -26,11 +27,13 @@ public class UserKcServices {
 	private String realm;
 
 	private Keycloak keycloak;
-	
-    public UserKcServices(Keycloak keycloak) {
-        this.keycloak = keycloak;
-    }
 
+	private ClientKcServices clientKcservices;
+	
+	public UserKcServices(Keycloak keycloak,ClientKcServices clientKcservices) {
+		this.keycloak = keycloak;
+		this.clientKcservices = clientKcservices;
+	}
 
 	public UserRepresentation createUser(User user) {
 		UserRepresentation userRep = mapUserRep(user);
@@ -51,63 +54,68 @@ public class UserKcServices {
 		return getUsersResource().list();
 	}
 
-	public void updateUser(String userId,User user) {
+	public void updateUser(String userId, User user) {
 		UserRepresentation userRepresentation = getUsersResource().get(userId).toRepresentation();
 		if (userRepresentation != null) {
 			String userIdD = userRepresentation.getId();
 			user.setId(userIdD);
-		    userRepresentation = UpdatemapUserRep(user);
-		    getUsersResource().get(userIdD).update(userRepresentation);
-		}else {
-		    throw new RuntimeException("User not found!");
+			userRepresentation = UpdatemapUserRep(user);
+			getUsersResource().get(userIdD).update(userRepresentation);
+		} else {
+			throw new RuntimeException("User not found!");
 		}
-		
+
 	}
 
 	public void deleteUser(String userId) {
 		getUsersResource().delete(userId);
 	}
 
-	public RoleRepresentation createUserRoles(String id, String roleName) {
-	    UsersResource usersResource = getUsersResource();
-	    RolesResource rolesResource = getRolesResource();
+	public RoleRepresentation assignUserRoles(String id, String roleName) {
+		UsersResource usersResource = getUsersResource();
+		RolesResource rolesResource = getRolesResource();
 
-	    // 🔹 Step 1: Validate if the user exists
-	    UserRepresentation user = usersResource.get(id).toRepresentation();
-	    if (user == null) {
-	        throw new RuntimeException("User ID not found in Keycloak: " + id);
-	    }
+		// Step 1: Validate if the user exists
+		UserRepresentation user = usersResource.get(id).toRepresentation();
+		if (user == null) {
+			throw new RuntimeException("User ID not found in Keycloak: " + id);
+		}
 
-	    // 🔹 Step 2: Validate if the role exists
-	    RoleRepresentation roleRep;
-	    try {
-	        roleRep = rolesResource.get(roleName).toRepresentation();
-	    } catch (Exception e) {
-	        throw new RuntimeException("Role not found in Keycloak: " + roleName);
-	    }
+		// Step 2: Validate if the role exists
+		RoleRepresentation roleRep;
+		try {
+			roleRep = rolesResource.get(roleName).toRepresentation();
+		} catch (Exception e) {
+			throw new RuntimeException("Role not found in Keycloak: " + roleName);
+		}
 
-	    List<RoleRepresentation> roles = getRolesResource().list();
-	    roles.forEach(role -> System.out.println("Available Role: " + role.getName()));
+		// List<RoleRepresentation> roles = getRolesResource().list();
+		// .forEach(role -> System.out.println("Available Role: " + role.getName()));
 
-	    // 🔹 Step 3: Assign role
-	    usersResource.get(id).roles().realmLevel().add(Arrays.asList(roleRep));
+		//  Step 3: Assign role
+		usersResource.get(id).roles().realmLevel().add(Arrays.asList(roleRep));
 
-	    return roleRep;
+		return roleRep;
 	}
 
-
-	public List<RoleRepresentation> getListOfUserRoles(String id) {
-		return getUsersResource().get(id).roles().realmLevel().listAll();
+	public List<RoleRepresentation> getListOfUserRoles(String id, String clientId) {
+		String clientUUID = clientKcservices.getClientId(clientId).get().getId();
+		List<RoleRepresentation> clientRoles = new ArrayList<RoleRepresentation>();
+		clientRoles.addAll(getUsersResource().get(id).roles().realmLevel().listAll());
+		clientRoles.addAll(getUsersResource().get(id).roles().clientLevel(clientUUID).listAll());
+		return clientRoles;
 	}
 
 	private UsersResource getUsersResource() {
-		RealmResource realmResourse = keycloak.realm(this.realm);
-		return realmResourse.users();
+		return getRealmResource().users();
 	}
 
 	private RolesResource getRolesResource() {
-		RealmResource realmResourse = keycloak.realm(this.realm);
-		return realmResourse.roles();
+		return getRealmResource().roles();
+	}
+
+	private RealmResource getRealmResource() {
+		return keycloak.realm(this.realm);
 	}
 
 	private UserRepresentation mapUserRep(User user) {
@@ -127,7 +135,7 @@ public class UserKcServices {
 		userRep.setCredentials(creds);
 		return userRep;
 	}
-	
+
 	private UserRepresentation UpdatemapUserRep(User user) {
 		UserRepresentation userRep = new UserRepresentation();
 		userRep.setId(user.getId());
@@ -144,12 +152,5 @@ public class UserKcServices {
 		userRep.setCredentials(creds);
 		return userRep;
 	}
-
-//	private RoleRepresentation mapRoleRep(Role role) {
-//		RoleRepresentation roleRep = new RoleRepresentation();
-//		roleRep.setName(role.getName());
-//		roleRep.setDescription(role.getDesc());
-//		return roleRep;
-//	}
 
 }

@@ -21,6 +21,8 @@ public class RoleKcServices {
 
 	@Value("${realm}")
 	private String realm;
+	
+	
 	private static final int PAGE_SIZE = 50; // Fetch roles in batches
 
 	private Keycloak keycloak;
@@ -51,6 +53,7 @@ public class RoleKcServices {
 	public void deleteUser(String roleName) {
 		getRolesResource().deleteRole(roleName);
 	}
+	
 	
 	//Based on Batch Size
 	 public Set<RoleRepresentation> getRolesByAttributeValues(List<String> attributeValues) {
@@ -112,6 +115,8 @@ public class RoleKcServices {
 
 	    return roleRep;
 	}
+	
+	
 
 
 }

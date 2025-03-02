@@ -1,6 +1,7 @@
 package com.book.network.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.book.network.DTO.ClientRoles;
 import com.book.network.DTO.User;
 import com.book.network.services.UserKcServices;
 
@@ -53,13 +55,14 @@ public class KcUserController {
 	}
 	
 	@PostMapping(value = "/user/{id}/role")
-	public void createUserRole(@PathVariable String id, @RequestParam String role) {
+	public void assignUserRole(@PathVariable String id, @RequestParam String role) {
 		System.out.println(id+"-"+role);
-		userKcServices.createUserRoles(id, role);
+		userKcServices.assignUserRoles(id, role);
 	}
 	
-	@GetMapping("/user/{id}/list-role")
-	private List<RoleRepresentation> getUser(@PathVariable String id) {
-		return userKcServices.getListOfUserRoles(id);
+	@GetMapping("/user/{id}/clientId/{clientId}/role")
+	private List<RoleRepresentation> getUser(@PathVariable String id,@PathVariable String clientId) {
+		return userKcServices.getListOfUserRoles(id, clientId);
 	}
+	
 }

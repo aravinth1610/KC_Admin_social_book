@@ -159,15 +159,17 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/user/eb1fbddc-a6a5-45ac-a464-8a47d5f61c58/list-role",
+					"raw": "localhost:8080/user/a68e1ffe-ee5d-4454-a383-f90e643c3b64/clientId/frnt-network/role",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"user",
-						"eb1fbddc-a6a5-45ac-a464-8a47d5f61c58",
-						"list-role"
+						"a68e1ffe-ee5d-4454-a383-f90e643c3b64",
+						"clientId",
+						"frnt-network",
+						"role"
 					]
 				}
 			},
@@ -308,7 +310,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n    [\n    {\n        \"path\": \"CaseData\",\n        \"component\": \"CaseDataComp\",\n        \"canActivate\": \"authGuard\",\n        \"apiEndPoint\":\"casedata/\",\n        \"permission\":\"POST\",\n        \"childrenAuthRoute\": [\n            {\n                \"path\": \"casedata/:id\",\n                \"component\": \"CaseDataSubComponent\",\n                \"apiEndPoint\":\"casedata/{id}\",\n                 \"canActivate\": \"authGuard\",\n                 \"permission\":\"GET\",\n                \"roles\": [\n                    {\n                        \"name\": \"GUST\"\n                    }\n                ]\n            }\n        ],\n        \"roles\": [\n            {\n                \"name\": \"ADMIN\"\n            },\n             {\n                \"name\": \"USER\"\n            }\n        ]\n    },\n       {\n        \"path\": \"authmenu\",\n        \"component\": \"authmenuComp\",\n        \"apiEndPoint\":\"authmenu\",\n        \"permission\":\"GET\"\n       \n    }\n\n]\n ]",
+					"raw": "[\n    {\n        \"path\": \"CaseData\",\n        \"component\": \"CaseDataComp\",\n        \"canActivate\": \"authGuard\",\n        \"apiEndPoint\": \"casedata/\",\n        \"permission\": \"POST\",\n        \"childrenAuthRoute\": [\n            {\n                \"path\": \"casedata/:id\",\n                \"component\": \"CaseDataSubComponent\",\n                \"apiEndPoint\": \"casedata/{id}\",\n                \"canActivate\": \"authGuard\",\n                \"permission\": \"GET\",\n                \"roles\": [\n                    {\n                        \"name\": \"GUST\"\n                    }\n                ]\n            }\n        ],\n        \"roles\": [\n            {\n                \"name\": \"ADMIN\"\n            },\n            {\n                \"name\": \"USER\"\n            }\n        ]\n    },\n    {\n        \"path\": \"authmenu\",\n        \"component\": \"authmenuComp\",\n        \"apiEndPoint\": \"authmenu\",\n        \"permission\": \"GET\"\n    }\n]",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -419,9 +421,21 @@
 		},
 		{
 			"name": "GetAllMenuDatas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "localhost:8080/authmenu",
 					"host": [
@@ -437,9 +451,21 @@
 		},
 		{
 			"name": "AuthMenuWebConfigAPI",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "localhost:8080/authmenu/web",
 					"host": [
@@ -449,6 +475,95 @@
 					"path": [
 						"authmenu",
 						"web"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books-Test",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ2QXJoQWxGWkVzeWMzY1pzNFFUTTNQdVh5NWZ1TU1QN3RVR1pNZFhScDBRIn0.eyJleHAiOjE3NDA5NTIyNDMsImlhdCI6MTc0MDkxNjI0MywianRpIjoiNzI1ZTIyNjEtNmJhNC00MDkzLTg2ZGEtYTNlZWViZjMzNDMzIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDkwL3JlYWxtcy9uZXR3b3JrIiwic3ViIjoiYTY4ZTFmZmUtZWU1ZC00NDU0LWEzODMtZjkwZTY0M2MzYjY0IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZnJudC1uZXR3b3JrIiwic2lkIjoiOWI1YTcwMGYtZTA3Ny00M2QxLTlmNGUtOGRjOGJhMDhlNTZkIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwic2NvcGUiOiIifQ.qLchLUKhD3mzfy-2IKzkiaoD5z4EFD1yqGkuhE5vmpdQSYsbZ2Qsp1dS8S-B7l0VlhYpAnwLEPz7YlFolDZP6D_kd5hRMJjCi1u_waKPpXV0idm_v9QJPzOcobcRbYdiK8BwdXUmZ_tVHduHca5kWuYv9xFcmxqG8Yw2yV-GKOHnnqhcg8zdFZLHVxPCdGyHbLMsirF65piuPVKmBRISJkGeZc-MPzHXG56XGwC4grfnqyrB2j_mJNAxfR56lFD-7vuW6TTlfEXzMZdrA0ELjOTc5ghjTE3cFoU_VIdzrK8ZfFo9LjGca19qlZeIgYU3rZ9sgGY4pa1cfK0IIGeaQA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/books",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateClientRoles",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"clientId\": \"dev-network\",\n        \"roles\": [\n            {\n                \"name\": \"GUST\"\n            }\n        ]\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/client/roles",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"client",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllRealmAndClientRoles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/client/roles/over-all/dev-network",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"client",
+						"roles",
+						"over-all",
+						"dev-network"
 					]
 				}
 			},

@@ -28,7 +28,7 @@ public class AuthMenuServices {
 	private final RolesRepository roleRepository;
 
 	@Transactional
-	public List<AuthRoutes> createAuthRoutes(Set<AuthRoutes> menu) {
+	public List<AuthRoutes> createAuthRoutes(List<AuthRoutes> menu) {
 		Set<String> existingRoleNames = roleKcServices.getListOfRole().stream().map(RoleRepresentation::getName)
 				.collect(Collectors.toSet());
 
@@ -38,7 +38,7 @@ public class AuthMenuServices {
 			}
 		});
 
-		return authMenuRepo.saveAll(menu.stream().filter(Objects::nonNull).toList()); // Filter out null values
+		return authMenuRepo.saveAll(menu); // Filter out null values
 	}
 
 
