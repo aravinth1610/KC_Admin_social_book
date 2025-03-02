@@ -12,7 +12,7 @@ import com.book.network.repositoryDTO.SecurityConfigRepositoryDTO;
 @Repository
 public interface AuthMenuRepository extends JpaRepository<AuthRoutes, Long> {
 
-	@Query("SELECT p.pkAuthRoute AS pkAuthRoute,p.apiEndPoint AS apiEndPoint, p.permission AS permission,p.canActivate AS canActivate,p.roles AS roles FROM AuthRoutes p LEFT JOIN p.roles")
+	@Query("SELECT p.pkAuthRoute AS pkAuthRoute,p.apiEndPoint AS apiEndPoint, p.permission AS permission,p.canActivate AS canActivate,r AS roles FROM AuthRoutes p LEFT JOIN p.roles r")
 	Set<SecurityConfigRepositoryDTO> getDataVal();
 	
 }

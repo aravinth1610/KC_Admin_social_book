@@ -43,32 +43,37 @@ public class WebConfig {
         }))
             .csrf((csrf) -> csrf.disable())
             .authorizeHttpRequests(auth -> {
-//                try {
-//                    this.authMenuServices.getSecurityConfigPermission().forEach(permission -> {
-//                        if (permission.getCanActivate() != null) {
-//                            try { 
-//                            	String[] authorities = permission.getRoles().stream().map(Roles::getName).toArray(String[]::new);
-//                                HttpMethod method = HttpMethod.valueOf(permission.getPermission()); 
-//                                auth.requestMatchers(method, permission.getApiEndPoint()).hasAnyAuthority(authorities); 
-//                            } catch (IllegalArgumentException e) {
-//                                throw new RuntimeException("Invalid HTTP method: " + permission.getPermission(), e);
-//                            }
-//                        } else {
-//                            auth.requestMatchers(permission.getApiEndPoint()).permitAll();
-//                        }
-//                    });
-//                } catch (Exception e) {
-//                    throw new RuntimeException("Failed to configure authorization", e);
-//                }
-//                auth.anyRequest().authenticated(); // Ensure this is applied only once
+            	
+//            	try {
+//            	    this.authMenuServices.getSecurityConfigPermission().forEach(permission -> {
+//            	        if (permission.getCanActivate() != null) {
+//            	            try {
+//            	                String[] authorities = permission.getRoles().stream().map(Roles::getName).toArray(String[]::new);
+//
+//            	                // Split multiple methods (e.g., "GET,POST")
+//            	                Arrays.stream(permission.getPermission().split(",")).map(String::trim).map(HttpMethod::valueOf)  
+//            	                        .forEach(method -> auth.requestMatchers(method, permission.getApiEndPoint()).hasAnyAuthority(authorities));
+//
+//            	            } catch (IllegalArgumentException e) {
+//            	                throw new RuntimeException("Invalid HTTP method: " + permission.getPermission(), e);
+//            	            }
+//            	        } else {
+//            	            Arrays.stream(permission.getPermission().split(",")).map(String::trim).map(HttpMethod::valueOf)
+//            	                    .forEach(method -> auth.requestMatchers(method, permission.getApiEndPoint()).permitAll());
+//            	        }
+//            	    });
+//            	} catch (Exception e) {
+//            	    throw new RuntimeException("Failed to configure authorization", e);
+//            	}
+//
+//            	auth.anyRequest().authenticated();          
 
 //--------------------------------------------------------------------------------------------------------------------				
 				auth
-						.requestMatchers( "/user","/authmenu/**","/realm/role/**").permitAll().anyRequest().authenticated();
+						.requestMatchers( "/user/**","/authmenu/**","/realm/role/**").permitAll().anyRequest().authenticated();
 //------------------------------------------------------------------------------------------------------------------------				
 			})
-   
-		.oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeyClockAuthenticationConverter())));
+  		.oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeyClockAuthenticationConverter())));
         return http.build();
     }
 }
