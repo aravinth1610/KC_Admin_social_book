@@ -23,7 +23,7 @@ public class AuthMenuController {
 	private final AuthMenuServices serv;
 
 	@PostMapping
-	private final List<AuthRoutes> createAuthMenu(@RequestBody Set<AuthRoutes> menu) {
+	private final List<AuthRoutes> createAuthMenu(@RequestBody List<AuthRoutes> menu) {
 		System.out.println("menu"+menu);
 		return serv.createAuthRoutes(menu);
 	}
