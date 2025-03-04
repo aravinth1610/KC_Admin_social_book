@@ -1,6 +1,5 @@
 package com.book.network.config;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -8,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.keycloak.representations.idm.RoleRepresentation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,12 +15,19 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
-import com.book.network.services.UserKcServices;
+import com.book.network.keycloakConfig.KeycloakSecurityUtil;
+import com.book.network.services.RoleServices;
 
 public class KeyClockAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken>{
 	
-	@Autowired
-	private UserKcServices userKcServices;
+	private final RoleServices roleServices;
+	private final KeycloakSecurityUtil keycloakUtil;
+	
+	public KeyClockAuthenticationConverter( RoleServices roleServices, KeycloakSecurityUtil keycloakUtil ) {
+		super();
+		this.roleServices = roleServices;
+		this.keycloakUtil = keycloakUtil;
+	}
 	
 	public AbstractAuthenticationToken convert(Jwt jwt) {
 		   try {
@@ -37,16 +42,14 @@ public class KeyClockAuthenticationConverter implements Converter<Jwt, AbstractA
 
 	private Collection<? extends GrantedAuthority> resourceRoles(Jwt jwtToken) {
 		System.out.println("--------token");
+		Long orgId = 10101L;
+		
+		keycloakUtil.initKeycloak(orgId);
 		System.out.println(getSub(jwtToken)+"-"+getClient(jwtToken));
 		Set<String> authorities = getGrantedAuthority(getSub(jwtToken), getClient(jwtToken));
-		
-		System.out.println(authorities);
-		
-		Arrays.asList("USER", "ADMIN");
-		return //((List<String>) realmAccess.get("roles"))
-				Arrays.asList("USER","ADMIN").stream().map(roleName -> roleName)
-				.map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
 
+		System.out.println(authorities);
+		return authorities.stream().map(roleName -> roleName).map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
 	}
 	
 	private String getSub(Jwt jwtToken) {
@@ -58,8 +61,7 @@ public class KeyClockAuthenticationConverter implements Converter<Jwt, AbstractA
 	}
 	
 	private Set<String> getGrantedAuthority(String sub, String clientId) {
-		List<RoleRepresentation> roles = userKcServices.getListOfUserRoles(sub, clientId);
-		return roles.stream().map(RoleRepresentation::getName).collect(Collectors.toSet());
+		return  roleServices.getGrantedAuthority(sub, clientId);
 	}
 
 }

@@ -5,37 +5,36 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.book.network.DTO.User;
+import com.book.network.keycloakConfig.KeycloakSecurityUtil;
 
 import jakarta.ws.rs.core.Response;
-import lombok.NoArgsConstructor;
 
 @Service
 public class UserKcServices {
 
-	@Value("${realm}")
-	private String realm;
+	private final ClientKcServices clientKcservices;
 
-	private Keycloak keycloak;
-
-	private ClientKcServices clientKcservices;
+	private final KeycloakSecurityUtil keycloakUtil;
 	
-	public UserKcServices(Keycloak keycloak,ClientKcServices clientKcservices) {
-		this.keycloak = keycloak;
+	public UserKcServices(KeycloakSecurityUtil keycloakUtil,ClientKcServices clientKcservices) {
+		this.keycloakUtil = keycloakUtil;
 		this.clientKcservices = clientKcservices;
 	}
 
-	public UserRepresentation createUser(User user) {
+	public UserRepresentation createUser(Long orgId ,User user) {
+		
+		//Init the Keycloak
+		keycloakUtil.initKeycloak(orgId);
+		
 		UserRepresentation userRep = mapUserRep(user);
 		Response response = getUsersResource().create(userRep);
 		System.out.println(response.getStatus() + "--" + response.getEntity().toString());
@@ -115,7 +114,7 @@ public class UserKcServices {
 	}
 
 	private RealmResource getRealmResource() {
-		return keycloak.realm(this.realm);
+		return keycloakUtil.getRealmResource();
 	}
 
 	private UserRepresentation mapUserRep(User user) {

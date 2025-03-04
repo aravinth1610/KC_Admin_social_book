@@ -10,26 +10,22 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.representations.idm.RoleRepresentation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.book.network.DTO.AttributeDTO;
+import com.book.network.keycloakConfig.KeycloakSecurityUtil;
 import com.book.network.modal.Roles;
 
 @Service
-public class RoleKcServices {
-
-	@Value("${realm}")
-	private String realm;
+public class RealmRoleKcServices {
 	
+	private final KeycloakSecurityUtil keycloakUtil;
 	
 	private static final int PAGE_SIZE = 50; // Fetch roles in batches
 
-	private Keycloak keycloak;
-
-	public RoleKcServices(Keycloak keycloak) {
+	public RealmRoleKcServices(KeycloakSecurityUtil keycloakUtil) {
 		super();
-		this.keycloak = keycloak;
+		this.keycloakUtil = keycloakUtil;
 	}
 
 	public void createRole(Roles role) {
@@ -86,8 +82,7 @@ public class RoleKcServices {
 	    }
 
 	private RolesResource getRolesResource() {
-		RealmResource realmResourse = keycloak.realm(this.realm);
-		return realmResourse.roles();
+		return keycloakUtil.getRolesResource();
 	}
 
 	private Roles mapRole(RoleRepresentation roleRep) {

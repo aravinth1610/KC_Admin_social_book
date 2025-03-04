@@ -1,38 +1,76 @@
 package com.book.network.keycloakConfig;
 
+import java.util.Optional;
+
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.keycloak.admin.client.resource.ClientsResource;
+import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.RolesResource;
 import org.springframework.stereotype.Component;
 
-@Configuration
+import com.book.network.modal.AuthOrgConfig;
+import com.book.network.repository.AuthOrgConfigRepository;
+
+@Component
 public class KeycloakSecurityUtil {
 
-	Keycloak keycloak;
-
-	@Value("${server-url}")
 	private String serverUrl;
 
-	@Value("${realm}")
 	private String realm;
 
-	@Value("${client-id}")
 	private String clientId;
 
-	@Value("${client-secret}")
 	private String clientSecret;
-
-	@Bean
-	public Keycloak getKeycloakInstance() {
-		System.out.println("KC INIT");
-		if (keycloak == null) {
-			System.out.println("--------------");
-			keycloak = KeycloakBuilder.builder().serverUrl(serverUrl).grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-					.realm(realm).clientId(clientId).clientSecret(clientSecret).build();
-		}
-		return keycloak;
+	
+	private final AuthOrgConfigRepository authOrgConfigRepsitory;
+	
+	public KeycloakSecurityUtil( AuthOrgConfigRepository authOrgConfigRepsitory ) {
+		super();
+		this.authOrgConfigRepsitory = authOrgConfigRepsitory;
 	}
+
+	public void initKeycloak(Long orgId) {
+		Optional<AuthOrgConfig> authOrgConfig = authOrgConfigRepsitory.findByOrgId(orgId);
+		System.out.println("---"+authOrgConfig.get().getServerUrl());
+		if(authOrgConfig.isEmpty()) {
+			throw new RuntimeException("No Keycloak configuration found for orgId: " + orgId);		
+		}	
+		
+		this.serverUrl = authOrgConfig.get().getServerUrl();
+		this.realm = authOrgConfig.get().getRealm();
+		this.clientId = authOrgConfig.get().getClientId();
+		this.clientSecret = authOrgConfig.get().getClientSecret();
+	}
+
+	public Keycloak getKeycloakInstance() {
+		System.out.println("--------------");
+		return KeycloakBuilder.builder().serverUrl(serverUrl).grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+				.realm(realm).clientId(clientId).clientSecret(clientSecret).build();
+	}
+
+	public String getRealm() {
+		return this.realm;
+	}
+
+	public ClientsResource getClientResource() {
+		Keycloak keycloak = getKeycloakInstance();
+		return keycloak.realm(this.realm).clients();
+	}
+	
+	public RealmResource getRealmResource() {
+		Keycloak keycloak = getKeycloakInstance();
+		return keycloak.realm(this.realm);
+	}
+	
+	public RolesResource getRolesResource() {
+		Keycloak keycloak = getKeycloakInstance();
+		RealmResource realmResourse = keycloak.realm(this.realm);
+		return realmResourse.roles();
+	}
+
+
+
+	
 }

@@ -26,10 +26,10 @@ public class KcUserController {
 
 	private UserKcServices userKcServices;
 
-	@PostMapping(value = "/user")
-	public UserRepresentation createUser(@RequestBody User user) {
+	@PostMapping(value = "/orgId/{orgId}/user")
+	public UserRepresentation createUser(@PathVariable(value="orgId") Long orgId ,@RequestBody User user) {
 		System.out.println(user);
-		return userKcServices.createUser(user);
+		return userKcServices.createUser(orgId, user);
 	}
 
 	@GetMapping("/user/{id}")

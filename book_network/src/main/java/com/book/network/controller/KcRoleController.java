@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.book.network.modal.Roles;
-import com.book.network.services.RoleKcServices;
+import com.book.network.services.RealmRoleKcServices;
 
 import lombok.AllArgsConstructor;
 
@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class KcRoleController {
 
-	private final RoleKcServices serv;
+	private final RealmRoleKcServices serv;
 	
 	@PostMapping("/realm/role")
 	private final void createRole(@RequestBody Roles role) {
