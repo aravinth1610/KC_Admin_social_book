@@ -9,29 +9,25 @@ import java.util.stream.Collectors;
 
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.admin.client.resource.RolesResource;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.book.network.DTO.AttributeDTO;
 import com.book.network.DTO.ClientRoles;
+import com.book.network.keycloakConfig.KeycloakSecurityUtil;
 import com.book.network.modal.Roles;
 
 @Service
 public class ClientRoleKcServices {
 	
-	@Value("${realm}")
-	private String realm;
+	private final KeycloakSecurityUtil keycloakUtil;
 
-	private Keycloak keycloak;
-
-	private final RoleKcServices realmRoleKcServices;
+	private final RealmRoleKcServices realmRoleKcServices;
 	
-	public ClientRoleKcServices(Keycloak keycloak, RoleKcServices realmRoleKcServices) {
-		this.keycloak = keycloak;
+	public ClientRoleKcServices(KeycloakSecurityUtil keycloakUtil, RealmRoleKcServices realmRoleKcServices) {
+		this.keycloakUtil = keycloakUtil;
 		this.realmRoleKcServices = realmRoleKcServices;
 	}
 
@@ -133,7 +129,7 @@ public class ClientRoleKcServices {
 	
 	
 	private RealmResource getRealmResource() {
-		return keycloak.realm(this.realm);
+		return keycloakUtil.getRealmResource();
 	}
 	
 	private RoleRepresentation mapRoleRep(Roles role) {

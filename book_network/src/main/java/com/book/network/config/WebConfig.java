@@ -12,8 +12,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.book.network.keycloakConfig.KeycloakSecurityUtil;
 import com.book.network.modal.Roles;
 import com.book.network.services.AuthMenuServices;
+import com.book.network.services.RoleServices;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -22,8 +24,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class WebConfig {
 	
-	private final AuthMenuServices authMenuServices;
+	private final DynamicAuthorizationManager authorizationManager;
 	
+	private final RoleServices roleServices;
+	
+	private final KeycloakSecurityUtil keycloakUtil;
+
 	
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -43,6 +49,8 @@ public class WebConfig {
         }))
             .csrf((csrf) -> csrf.disable())
             .authorizeHttpRequests(auth -> {
+            	
+            	//This will not in use because of DynamicAuthorizationManager
             	
 //            	try {
 //            	    this.authMenuServices.getSecurityConfigPermission().forEach(permission -> {
@@ -68,12 +76,15 @@ public class WebConfig {
 //
 //            	auth.anyRequest().authenticated();          
 
+            	//Dynamic Request get from Database for ever Request it will get from database
+            	
+//          	auth.anyRequest().access(authorizationManager);
 //--------------------------------------------------------------------------------------------------------------------				
 				auth
 						.requestMatchers( "/user/**","/authmenu/**","/realm/role/**").permitAll().anyRequest().authenticated();
 //------------------------------------------------------------------------------------------------------------------------				
 			})
-  		.oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeyClockAuthenticationConverter())));
+  		.oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeyClockAuthenticationConverter(roleServices, keycloakUtil))));
         return http.build();
     }
 }

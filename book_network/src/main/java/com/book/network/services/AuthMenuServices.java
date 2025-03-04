@@ -23,7 +23,7 @@ public class AuthMenuServices {
 
 	private final AuthMenuRepository authMenuRepo;
 
-	private final RoleKcServices roleKcServices;
+	private final RealmRoleKcServices roleKcServices;
 	
 	private final RolesRepository roleRepository;
 
