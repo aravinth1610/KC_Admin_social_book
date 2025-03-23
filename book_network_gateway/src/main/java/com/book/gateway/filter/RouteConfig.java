@@ -11,18 +11,18 @@ public class RouteConfig {
 	@Bean
 	protected RouteLocator routes(RouteLocatorBuilder builder, AuthenticationPreFilter authFilter) {
 		return builder.routes()
-				.route("book_network",
+				.route("esecurity",
 						r -> r.path("/esecurity/**")
 								.filters(f ->
 								//f.rewritePath("/authentication-service(?<segment>/?.*)", "$\\{segment}")
 								f.filter(authFilter.apply(new AuthenticationPreFilter.Config())))
-								.uri("lb://book-network"))
-				.route("book_network_tracker",
-						r -> r.path("/tracker/**")
+								.uri("lb://esecurity"))
+				.route("book",
+						r -> r.path("/book/**")
 								.filters(f -> 
 								        //f.rewritePath("/user-service(?<segment>/?.*)", "$\\{segment}")
 										f.filter(authFilter.apply(new AuthenticationPreFilter.Config())))
-								.uri("lb://book_network_tracker"))
+								.uri("lb://book"))
 				.route("book_network-Registry",
 						r -> r.path("/eureka/web")
 						.filters(f ->  f.setPath("/"))

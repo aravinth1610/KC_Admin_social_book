@@ -68,7 +68,11 @@ public class DynamicAuthorizationManager implements AuthorizationManager<Request
 												return true;
 										} 
 										else {
-											return (antMatcher.matches(request));
+//											if (apiEndPoint.equalsIgnoreCase("/validate") && method.name().equalsIgnoreCase("POST")) {
+//												return false;
+//											} else {
+												return (antMatcher.matches(request));
+//											}
 										}
 	                                });
 	                    })

@@ -29,7 +29,7 @@ public class WebClientAuthCall {
 		System.out.println("httpHeaders=="+httpHeaders);
 	    ServerHttpRequest request = exchange.getRequest();
 	    return webClientBuild().build().post()
-	        .uri("lb://book-network/esecurity/validate")
+	        .uri("lb://esecurity/esecurity/validate")
 	        .headers(header -> header.addAll(httpHeaders))
 	        .retrieve()
 	        .bodyToMono(String.class)
