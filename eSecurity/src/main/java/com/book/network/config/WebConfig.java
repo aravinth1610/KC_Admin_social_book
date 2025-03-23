@@ -37,7 +37,7 @@ public class WebConfig {
 					@Override
 					public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 						CorsConfiguration config = new CorsConfiguration();
-						config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+						config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
 						config.setAllowedMethods(Collections.singletonList("*"));
 						config.setAllowCredentials(true);
 						config.setAllowedHeaders(Collections.singletonList("*"));
@@ -45,14 +45,16 @@ public class WebConfig {
 						config.setMaxAge(3600L);
 						return config;
 					}
-				})).csrf((csrf) -> csrf.disable()).authorizeHttpRequests(auth -> {
+				}))
+		      
+		      .csrf((csrf) -> csrf.disable()).authorizeHttpRequests(auth -> {
 
 //Dynamic Request get from Database for ever Request it will get from database
 					auth.anyRequest().access(authorizationManager);
 
 //--------------------------------------------------------------------------------------------------------------------				
 //			auth
-//						.requestMatchers( "/user/**","/authmenu/**","/realm/role/**").permitAll().anyRequest().authenticated();
+//						.requestMatchers( "/books/**","/user/**","/authmenu/**","/realm/role/**").permitAll().anyRequest().authenticated();
 //------------------------------------------------------------------------------------------------------------------------				
 				})
 				.oauth2ResourceServer(auth -> auth.jwt(token -> token
