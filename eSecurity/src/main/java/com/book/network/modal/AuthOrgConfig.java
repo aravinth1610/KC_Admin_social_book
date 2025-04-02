@@ -1,5 +1,8 @@
 package com.book.network.modal;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,9 +19,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicUpdate
+@DynamicInsert
 @Entity
 @Table (name = "auth_orgconfig",uniqueConstraints = { @UniqueConstraint(columnNames = "orgid") })
-public class AuthOrgConfig {
+public class AuthOrgConfig extends AuditEntity{
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)

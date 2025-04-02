@@ -30,7 +30,8 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2024.0.1</spring-cloud.version>
-		<uniCore>/home/aravinth/Applications/Eclipse/EclipseWorkspace/SpringBootWorkspace/Unic/Unicore/target/Unicore-0.0.1.jar</uniCore>
+		<uniCore>
+			/home/aravinth/Applications/Eclipse/EclipseWorkspace/SpringBootWorkspace/Unic/Unicore/target/Unicore-0.0.1.jar</uniCore>
 	</properties>
 	<dependencies>
 		<dependency>

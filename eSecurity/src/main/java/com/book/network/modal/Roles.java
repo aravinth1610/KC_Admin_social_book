@@ -3,6 +3,9 @@ package com.book.network.modal;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.book.network.DTO.AttributeDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -25,9 +28,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicUpdate
+@DynamicInsert
 @Entity
 @Table(name = "auth_role")
-public class Roles {
+public class Roles extends AuditEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +69,8 @@ public class Roles {
 		Roles other = (Roles) obj;
 		return Objects.equals(pkRoleId, other.pkRoleId);
 	}
+	
+	
 	
 	
 }
