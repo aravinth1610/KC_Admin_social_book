@@ -21,72 +21,60 @@ public class WebClientAuthCall {
 
 	@Bean
 	@LoadBalanced
-	 WebClient.Builder webClientBuild() {
+	WebClient.Builder webClientBuild() {
 		return WebClient.builder();
 	}
 
-	public Mono<Void> tokenValidationAPIExchange(HttpHeaders httpHeaders, ServerWebExchange exchange,GatewayFilterChain chain) {
-		System.out.println("httpHeaders=="+httpHeaders);
-	    ServerHttpRequest request = exchange.getRequest();
-	    return webClientBuild().build().post()
-	        .uri("lb://esecurity/esecurity/validate")
-	        .headers(header -> header.addAll(httpHeaders))
-	        .retrieve()
-	        .bodyToMono(String.class)
-	        .flatMap(response -> {  // Use flatMap instead of map for non-blocking chaining
-	            System.out.println("=====================:: " + response);
+	public Mono<Void> tokenValidationAPIExchange(HttpHeaders httpHeaders, ServerWebExchange exchange,
+			GatewayFilterChain chain) {
 
-	            // Mutate the request and rebuild it
-	            ServerHttpRequest mutatedRequest = request.mutate()
-	                .header("X-User-ID", "datadata")  // Replace with actual data if needed
-	                .build();
+		ServerHttpRequest request = exchange.getRequest();
+		return webClientBuild().build().post()
+				.uri("lb://esecurity/esecurity/validate")
+				.headers(header -> header.addAll(httpHeaders)).exchangeToMono(response -> {
 
-	            // Continue the filter chain with the modified request
-	            return chain.filter(exchange.mutate().request(mutatedRequest).build());
-	        })
-//            .map(response -> {
-////            	String userId = request.getHeaders().getFirst("X-User-ID");
-//            	System.out.println("=====================:: "+response);
-//                exchange.getRequest().mutate().header("X-User-ID", "datadata")
-//            	.build();
-//                
-//                return exchange;
-//            })
-//            .flatMap(chain::filter)
-            .onErrorResume(error -> {
-            	System.out.println(error);
-	            HttpStatusCode errorCode;
-	            String errorMsg;
-	            if (error instanceof WebClientResponseException) {
-	                WebClientResponseException webClientException = (WebClientResponseException) error;
-	                errorCode = webClientException.getStatusCode();
-	                errorMsg = webClientException.getResponseBodyAsString();
-	                System.out.println(webClientException.getResponseBodyAsString());
-	            } else {
-	            	 System.out.println("-----------------------------");
-	                errorCode = HttpStatus.BAD_GATEWAY;
-	                errorMsg = HttpStatus.BAD_GATEWAY.getReasonPhrase();
-	            }
-	            
-	            return onError(exchange, String.valueOf(errorCode.value()), errorMsg, "JWT Authentication Failed", errorCode);
-	        });
+					HttpHeaders responseHeaders = response.headers().asHttpHeaders();
+					String userId = responseHeaders.getFirst("X-user-X-Id");
+
+					return response.bodyToMono(String.class).flatMap(body -> {
+
+						ServerHttpRequest mutatedRequest = request.mutate()
+								.header("X-User-ID", userId != null ? userId : "unknown").build();
+
+						return chain.filter(exchange.mutate().request(mutatedRequest).build());
+					});
+				}).onErrorResume(error -> {
+					HttpStatusCode errorCode;
+					String errorMsg;
+					if (error instanceof WebClientResponseException) {
+						WebClientResponseException webClientException = (WebClientResponseException) error;
+						errorCode = webClientException.getStatusCode();
+						errorMsg = webClientException.getResponseBodyAsString();
+						System.out.println(webClientException.getResponseBodyAsString());
+					} else {
+						errorCode = HttpStatus.BAD_GATEWAY;
+						errorMsg = HttpStatus.BAD_GATEWAY.getReasonPhrase();
+					}
+
+					return onError(exchange, String.valueOf(errorCode.value()), errorMsg, "JWT Authentication Failed",errorCode);
+				});
 	}
 
-    private Mono<Void> onError(ServerWebExchange exchange, String errCode, String err, String errDetails, HttpStatusCode httpStatus) {
-        DataBufferFactory dataBufferFactory = exchange.getResponse().bufferFactory();
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-        try {
-            response.getHeaders().add("Content-Type", "application/json");
-            byte[] bytes = err.getBytes();  
-            return response.writeWith(Mono.just(bytes).map(t -> dataBufferFactory.wrap(t)));
+	private Mono<Void> onError(ServerWebExchange exchange, String errCode, String err, String errDetails,HttpStatusCode httpStatus) {
+		
+		DataBufferFactory dataBufferFactory = exchange.getResponse().bufferFactory();
+		ServerHttpResponse response = exchange.getResponse();
+		response.setStatusCode(httpStatus);
+		try {
+			response.getHeaders().add("Content-Type", "application/json");
+			byte[] bytes = err.getBytes();
+			return response.writeWith(Mono.just(bytes).map(t -> dataBufferFactory.wrap(t)));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 
-        }
-        return response.setComplete();
-    }
+		}
+		return response.setComplete();
+	}
 
-	
 }

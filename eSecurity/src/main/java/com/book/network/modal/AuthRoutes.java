@@ -3,6 +3,9 @@ package com.book.network.modal;
 import java.util.Objects;
 import java.util.Set;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -28,9 +31,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicUpdate
+@DynamicInsert
 @Entity
 @Table(name = "auth_routes")
-public class AuthRoutes {
+public class AuthRoutes extends AuditEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
