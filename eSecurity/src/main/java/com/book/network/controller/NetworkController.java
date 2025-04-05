@@ -14,7 +14,7 @@ public class NetworkController {
 
 
 	@GetMapping("/books")
-	public final ResponseEntityWrapper<?> getData(Authentication  authenticationUser) { //
+	public ResponseEntityWrapper<?> getData(Authentication  authenticationUser) { //
 		System.out.println("----"+authenticationUser.getName()+"--"+authenticationUser.getPrincipal().toString()+"--"+authenticationUser.getAuthorities().toString());
 		return new ResponseEntityWrapper<>(Arrays.asList(Map.of("Name", "Ram", "Age", 12, "Books", Arrays.asList("Jemmy", "Makers"))));
 	}

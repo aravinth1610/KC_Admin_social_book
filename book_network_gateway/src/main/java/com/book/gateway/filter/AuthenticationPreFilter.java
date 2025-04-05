@@ -1,5 +1,9 @@
 package com.book.gateway.filter;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -20,10 +24,11 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Authen
 	
 	 @Override
 	 public GatewayFilter apply(Config config) {
+			String uniqueId = Base64.getUrlEncoder().withoutPadding()
+					.encodeToString(UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8)).substring(0, 12);
+		 
 	        return (exchange, chain) -> {
-	            ServerHttpRequest request = exchange.getRequest();
-//	            log.info("**************************************************************************");
-//	            log.info("URL is - " + request.getURI().getPath());
+	            ServerHttpRequest request = exchange.getRequest();	            
 	            String fullPath = request.getPath().pathWithinApplication().value();
 	            String apiPath = fullPath.substring(fullPath.indexOf("/",1));
 	            String bearerToken = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
@@ -32,8 +37,9 @@ public class AuthenticationPreFilter extends AbstractGatewayFilterFactory<Authen
 	    		httpHeaders.add(HttpHeaders.AUTHORIZATION, bearerToken);
 	    		httpHeaders.add("X-URI-X-Request", apiPath);
 	    		httpHeaders.add("X-Http-X-Method", request.getMethod().toString());
+	    		httpHeaders.add("X-UUID-X", uniqueId);
 	    		
-	           return  webClientAuthCall.tokenValidationAPIExchange(httpHeaders, exchange,chain);
+	           return  webClientAuthCall.tokenValidationAPIExchange(uniqueId, httpHeaders, exchange,chain);
 	        };
 	    }
 }

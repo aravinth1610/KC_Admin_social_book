@@ -1,5 +1,12 @@
 package com.book.gateway.authCall;
 
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Base64;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.context.annotation.Bean;
@@ -25,42 +32,54 @@ public class WebClientAuthCall {
 		return WebClient.builder();
 	}
 
-	public Mono<Void> tokenValidationAPIExchange(HttpHeaders httpHeaders, ServerWebExchange exchange,
+	public Mono<Void> tokenValidationAPIExchange(String uniqueId,HttpHeaders httpHeaders, ServerWebExchange exchange,
 			GatewayFilterChain chain) {
 
 		ServerHttpRequest request = exchange.getRequest();
 		return webClientBuild().build().post()
 				.uri("lb://esecurity/esecurity/validate")
-				.headers(header -> header.addAll(httpHeaders)).exchangeToMono(response -> {
+			        .headers(header -> header.addAll(httpHeaders))
+			        .retrieve()
+			        .bodyToMono(Map.class)
+				.flatMap(responseMap -> {
+					Map<String, Object> responseData = (Map<String, Object>) responseMap.get("data");
 
-					HttpHeaders responseHeaders = response.headers().asHttpHeaders();
-					String userId = responseHeaders.getFirst("X-user-X-Id");
+					ServerHttpRequest mutatedRequest = request.mutate()
+					        .headers(gatewayHttpHeaders -> {
+					        	gatewayHttpHeaders.add("X-UserID-X", responseData != null ? responseData.get("X-user-X-Id").toString() : "unknown");
+					        	gatewayHttpHeaders.add("X-UUID-X", uniqueId);
+					        })
+					        .build();
 
-					return response.bodyToMono(String.class).flatMap(body -> {
 
-						ServerHttpRequest mutatedRequest = request.mutate()
-								.header("X-User-ID", userId != null ? userId : "unknown").build();
-
-						return chain.filter(exchange.mutate().request(mutatedRequest).build());
-					});
+					return chain.filter(exchange.mutate().request(mutatedRequest).build());
 				}).onErrorResume(error -> {
 					HttpStatusCode errorCode;
 					String errorMsg;
 					if (error instanceof WebClientResponseException) {
+
 						WebClientResponseException webClientException = (WebClientResponseException) error;
 						errorCode = webClientException.getStatusCode();
-						errorMsg = webClientException.getResponseBodyAsString();
-						System.out.println(webClientException.getResponseBodyAsString());
+						String responseErrorMsg = webClientException.getResponseBodyAsString();
+
+						if (responseErrorMsg.contains("LoadBalancer does not contain an instance for the service")) {
+						        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a");
+						        String dateTime = formatter.format(new Date());
+							errorMsg = "{\"status\": \"Failure\",\"message\": \"Service Unavailable.\",\"data\": [{\"errorCode\": \"ABI003\",\"reason\": \"No available instances for esecurity.\",\"schemaPath\": \"" + request.getURI().getPath() + "\",\"timestamp\": \"" + dateTime + "\"}]}";
+						} else {
+							errorMsg = responseErrorMsg;
+						}
+
 					} else {
 						errorCode = HttpStatus.BAD_GATEWAY;
 						errorMsg = HttpStatus.BAD_GATEWAY.getReasonPhrase();
 					}
 
-					return onError(exchange, String.valueOf(errorCode.value()), errorMsg, "JWT Authentication Failed",errorCode);
+					return onError(exchange, String.valueOf(errorCode.value()), errorMsg, errorCode);
 				});
 	}
 
-	private Mono<Void> onError(ServerWebExchange exchange, String errCode, String err, String errDetails,HttpStatusCode httpStatus) {
+	private Mono<Void> onError(ServerWebExchange exchange, String errCode, String err,HttpStatusCode httpStatus) {
 		
 		DataBufferFactory dataBufferFactory = exchange.getResponse().bufferFactory();
 		ServerHttpResponse response = exchange.getResponse();

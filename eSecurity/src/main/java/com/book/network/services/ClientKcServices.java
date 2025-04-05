@@ -18,8 +18,8 @@ public class ClientKcServices {
 		this.keycloakUtil = keycloakUtil;
 	}
 
-	public Optional<ClientRepresentation> getClientId(String clientId) {
-		return getClientResource().findByClientId(clientId).stream().findFirst();
+	public ClientRepresentation getClientId(String clientId) {
+		return getClientResource().findByClientId(clientId).stream().findFirst().get();
 	}
 
 	private ClientsResource getClientResource() {

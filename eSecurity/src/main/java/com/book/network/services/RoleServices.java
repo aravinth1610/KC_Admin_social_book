@@ -9,6 +9,7 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.stereotype.Service;
 
 @Service
+//@AllArgsConstructor
 public class RoleServices {
 
 	private final UserKcServices userKcServices;
@@ -17,7 +18,7 @@ public class RoleServices {
 
 	private final ClientRoleKcServices clientRoleKcServices;
 
-	private RoleServices( UserKcServices userKcServices, RealmRoleKcServices realmRoleKcServices,
+	public RoleServices( UserKcServices userKcServices, RealmRoleKcServices realmRoleKcServices,
 			ClientRoleKcServices clientRoleKcServices )
 	{
 		this.userKcServices = userKcServices;
