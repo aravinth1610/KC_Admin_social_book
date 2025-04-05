@@ -24,32 +24,32 @@ public class KcRoleController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/realm/role")
-	private final ResponseEntityWrapper<?> createRole(@RequestBody Roles role) {
+	public ResponseEntityWrapper<?> createRole(@RequestBody Roles role) {
 		System.out.println(role);
 		 serv.createRole(role);
 		 return new ResponseEntityWrapper<>();
 	}
 	
 	@GetMapping("/realm/roles")
-	public final ResponseEntityWrapper<?> getListOfRoles() {
+	public ResponseEntityWrapper<?> getListOfRoles() {
 		 return new ResponseEntityWrapper<>(serv.getListOfRole());
 	}
 
 	@GetMapping("/realm/role/{roleName}")
-	public final ResponseEntityWrapper<?> getListOfRoles(@PathVariable(value="roleName") String roleName) {
+	public ResponseEntityWrapper<?> getListOfRoles(@PathVariable(value="roleName") String roleName) {
 		System.out.println(roleName);
 		return new ResponseEntityWrapper<>(serv.getRole(roleName));
 	}
 	
 	@PutMapping("/realm/role/{roleName}")
-	public final ResponseEntityWrapper<?> updateRole(@PathVariable String roleName, @RequestBody Roles role) {
+	public ResponseEntityWrapper<?> updateRole(@PathVariable String roleName, @RequestBody Roles role) {
 		serv.updateRole(roleName, role);
 		return new ResponseEntityWrapper<>();
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/realm/role/{roleName}")
-	public final ResponseEntityWrapper<?> deleteRole(@PathVariable String roleName) {
+	public ResponseEntityWrapper<?> deleteRole(@PathVariable String roleName) {
 		serv.deleteUser(roleName);
 		return new ResponseEntityWrapper<>();
 	}

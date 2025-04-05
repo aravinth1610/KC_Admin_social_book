@@ -1,26 +1,28 @@
 package com.book.network.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unicore.customeResponse.ResponseEntityWrapper;
 
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-
 @RestController
-@AllArgsConstructor
 public class TokenController {
-
-	@PostMapping("/validate")
-	private final ResponseEntityWrapper<?> validate(Authentication authenticationUser, HttpServletResponse response) {
-		System.out.println("==============/Valiate");
 	
+	@PostMapping("/validate")
+	public ResponseEntityWrapper<?> validate() {
+		System.out.println("==============/Valiate");
+		Map<String, String> userId = new HashMap<>();
+		Authentication authenticationUser = SecurityContextHolder.getContext().getAuthentication();
+
 		if (authenticationUser != null && authenticationUser.getName() != null) {
-	    	response.addHeader("X-user-X-Id", authenticationUser.getName().toString());
+			userId.put("X-user-X-Id", authenticationUser.getName().toString());
 	    }
-	    return new ResponseEntityWrapper<>();
+		return new ResponseEntityWrapper<>(userId);
 	}
 
 	

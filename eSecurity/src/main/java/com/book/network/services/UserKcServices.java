@@ -98,7 +98,7 @@ public class UserKcServices {
 	}
 
 	public List<RoleRepresentation> getListOfUserRoles(String id, String clientId) {
-		String clientUUID = clientKcservices.getClientId(clientId).get().getId();
+		String clientUUID = clientKcservices.getClientId(clientId).getId();
 		List<RoleRepresentation> clientRoles = new ArrayList<RoleRepresentation>();
 		clientRoles.addAll(getUsersResource().get(id).roles().realmLevel().listAll());
 		clientRoles.addAll(getUsersResource().get(id).roles().clientLevel(clientUUID).listAll());

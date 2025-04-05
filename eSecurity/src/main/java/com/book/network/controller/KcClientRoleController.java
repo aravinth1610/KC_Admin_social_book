@@ -27,31 +27,31 @@ public class KcClientRoleController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping(value = "/client/roles")
-	public final ResponseEntityWrapper<?> createClientRoles(@RequestBody Set<ClientRoles> clientRoles) {
+	public ResponseEntityWrapper<?> createClientRoles(@RequestBody Set<ClientRoles> clientRoles) {
 		clientRoleservices.createClientRole(clientRoles);
 		return new ResponseEntityWrapper<>();
 	}
 
 	@GetMapping(value = "/client/roles/{clientId}")
-	public final ResponseEntityWrapper<?> getClientRoles(@PathVariable(value = "clientId") String  clientId) {
+	public ResponseEntityWrapper<?> getClientRoles(@PathVariable(value = "clientId") String  clientId) {
 		return new ResponseEntityWrapper<>(clientRoleservices.getAllRoleByClientId(clientId));
 	}
 	
 	@GetMapping(value = "/client/roles/over-all/{clientId}")
-	public final ResponseEntityWrapper<?> getOverAllClientRoles(@PathVariable(value = "clientId") String  clientId) {
+	public ResponseEntityWrapper<?> getOverAllClientRoles(@PathVariable(value = "clientId") String  clientId) {
 		return new ResponseEntityWrapper<>(clientRoleservices.getOverAllRolesForClientId(clientId));
 	}
 
 
 	@PutMapping("/client/roles/{clientId}/{roleName}")
-	private final ResponseEntityWrapper<?> updateClientRole(@PathVariable(value = "clientId") String clientId, @PathVariable(value = "roleName") String roleName, @RequestBody Roles role) {
+	private ResponseEntityWrapper<?> updateClientRole(@PathVariable(value = "clientId") String clientId, @PathVariable(value = "roleName") String roleName, @RequestBody Roles role) {
 		clientRoleservices.updateRoleByClientId(clientId, roleName, role);
 		return new ResponseEntityWrapper<>();
 	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/client/roles/{clientId}/{roleName}")
-	public final ResponseEntityWrapper<?> deleteClientRole(@PathVariable(value = "clientId") String clientId, @PathVariable(value = "roleName") String roleName) {
+	public ResponseEntityWrapper<?> deleteClientRole(@PathVariable(value = "clientId") String clientId, @PathVariable(value = "roleName") String roleName) {
 		clientRoleservices.deleteRoleByClientId(clientId, roleName);
 		return new ResponseEntityWrapper<>();
 	}

@@ -26,24 +26,24 @@ public class AuthMenuController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	private final ResponseEntityWrapper<?> createAuthMenu(@RequestBody List<AuthRoutes> menu) {
+	public ResponseEntityWrapper<?> createAuthMenu(@RequestBody List<AuthRoutes> menu) {
 		System.out.println("menu"+menu);
 		return new ResponseEntityWrapper<>(serv.createAuthRoutes(menu));
 	}
 
 	@GetMapping
-	public final ResponseEntityWrapper<?> getAllAuthMenu() {
+	public ResponseEntityWrapper<?> getAllAuthMenu() {
 		return new ResponseEntityWrapper<>(serv.getListOfAuthRoutes());
 	}
 	
 
 	@GetMapping("/web")
-	public final ResponseEntityWrapper<?> getSecurityWebConfig() {
+	public ResponseEntityWrapper<?> getSecurityWebConfig() {
 		return new ResponseEntityWrapper<>(serv.getSecurityConfigPermission());
 	}
 	
 	@PostMapping("/org")
-	public final ResponseEntityWrapper<?> authConfig(@RequestBody AuthOrgConfig auth) {
+	public ResponseEntityWrapper<?> authConfig(@RequestBody AuthOrgConfig auth) {
 		return new ResponseEntityWrapper<>(serv.authOrgConfig(auth));
 	}
 
