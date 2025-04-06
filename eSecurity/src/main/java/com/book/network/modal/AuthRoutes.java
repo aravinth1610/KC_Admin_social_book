@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -35,6 +36,7 @@ import lombok.Setter;
 @DynamicInsert
 @Entity
 @Table(name = "auth_routes")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthRoutes extends AuditEntity {
 
 	@Id

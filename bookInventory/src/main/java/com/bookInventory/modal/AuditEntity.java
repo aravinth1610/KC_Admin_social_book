@@ -1,4 +1,4 @@
-package com.book.network.modal;
+package com.bookInventory.modal;
 
 import java.util.Date;
 
@@ -61,6 +61,7 @@ public class AuditEntity {
 		}else {
 			log.warn("MDC does not contain user ID when persisting {}", this.getClass().getSimpleName());
 		}
+
 	}
 
 }
