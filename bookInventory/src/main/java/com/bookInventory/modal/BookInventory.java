@@ -1,15 +1,14 @@
-package com.book.network.modal;
+package com.bookInventory.modal;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.book.network.DTO.AttributeDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,9 +16,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,32 +30,31 @@ import lombok.Setter;
 @DynamicUpdate
 @DynamicInsert
 @Entity
-@Table(name = "auth_role")
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Roles extends AuditEntity {
+@Table(name = "book_inventory")
+public class BookInventory extends AuditEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "pk_role_id")
-	private Long pkRoleId;
-	
-	@Column(name="role_name")
-	private String name;
-	
-	@Column(name="role_desc")
-	private String desc;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_role", insertable = false, updatable = false)
-	@JsonBackReference
-	private AuthRoutes authRoutes;
-	
-	@Transient
-	private List<AttributeDTO> attributes;
+	@Column(name = "pk_book_inventory_id")
+	private Long bookInventoryId;
+
+	@Column(name = "book_name")
+	private String bookName;
+
+	@Column(name = "authory_name")
+	private String authorName;
+
+	@Column(name = "inventory_house")
+	private String inventoryHouse;
+
+	@OneToMany(targetEntity = Address.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "fk_address")
+	@JsonManagedReference
+	private Set<Address> address;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(pkRoleId);
+		return Objects.hash(bookInventoryId);
 	}
 
 	@Override
@@ -68,11 +65,8 @@ public class Roles extends AuditEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Roles other = (Roles) obj;
-		return Objects.equals(pkRoleId, other.pkRoleId);
+		BookInventory other = (BookInventory) obj;
+		return Objects.equals(bookInventoryId, other.bookInventoryId);
 	}
-	
-	
-	
-	
+
 }

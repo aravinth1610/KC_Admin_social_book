@@ -1,14 +1,11 @@
-package com.book.network.modal;
+package com.bookInventory.modal;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.book.network.DTO.AttributeDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,32 +28,33 @@ import lombok.Setter;
 @DynamicUpdate
 @DynamicInsert
 @Entity
-@Table(name = "auth_role")
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Roles extends AuditEntity {
+@Table(name = "book_address")
+public class Address {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "pk_role_id")
-	private Long pkRoleId;
-	
-	@Column(name="role_name")
-	private String name;
-	
-	@Column(name="role_desc")
-	private String desc;
-	
+	@Column(name = "pk_address_id")
+	private Long addressId;
+
+	private String address;
+
+	private String city;
+
+	private String state;
+
+	private String country;
+
+	@Column(name = "postal_code")
+	private Long postalCode;
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "fk_role", insertable = false, updatable = false)
+	@JoinColumn(name = "fk_address", insertable = false, updatable = false)
 	@JsonBackReference
-	private AuthRoutes authRoutes;
-	
-	@Transient
-	private List<AttributeDTO> attributes;
+	private BookInventory bookInvetory;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(pkRoleId);
+		return Objects.hash(addressId);
 	}
 
 	@Override
@@ -68,11 +65,8 @@ public class Roles extends AuditEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Roles other = (Roles) obj;
-		return Objects.equals(pkRoleId, other.pkRoleId);
+		Address other = (Address) obj;
+		return Objects.equals(addressId, other.addressId);
 	}
-	
-	
-	
-	
+
 }

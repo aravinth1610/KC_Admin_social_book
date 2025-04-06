@@ -23,6 +23,12 @@ public class RouteConfig {
 								        //f.rewritePath("/user-service(?<segment>/?.*)", "$\\{segment}")
 										f.filter(authFilter.apply(new AuthenticationPreFilter.Config())))
 								.uri("lb://book"))
+				.route("bookInventory",
+						r -> r.path("/bookInventory/**")
+								.filters(f -> 
+								        //f.rewritePath("/user-service(?<segment>/?.*)", "$\\{segment}")
+										f.filter(authFilter.apply(new AuthenticationPreFilter.Config())))
+								.uri("lb://bookInventory"))
 				.route("book_network-Registry",
 						r -> r.path("/eureka/web")
 						.filters(f ->  f.setPath("/"))

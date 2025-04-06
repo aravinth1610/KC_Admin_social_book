@@ -3,6 +3,8 @@ package com.book.network.modal;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ import lombok.Setter;
 @DynamicInsert
 @Entity
 @Table (name = "auth_orgconfig",uniqueConstraints = { @UniqueConstraint(columnNames = "orgid") })
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthOrgConfig extends AuditEntity{
 
 	@Id
