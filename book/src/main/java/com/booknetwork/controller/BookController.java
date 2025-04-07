@@ -3,7 +3,6 @@ package com.booknetwork.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,4 +26,10 @@ public class BookController {
 		bookServices.bookData(user);
 		return new ResponseEntityWrapper<>(Arrays.asList(Map.of("Name", "Ram", "Age", 12, "Books", Arrays.asList("Jemmy", "Makers"))));
 	}
+	
+	@PostMapping("/{id}")
+	public ResponseEntityWrapper<?> getBookInv() { 
+		return new ResponseEntityWrapper<>(bookServices.bookInv());
+	}
+
 }
