@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
 import com.book.network.keycloakConfig.KeycloakSecurityUtil;
 import com.book.network.securityException.CustomAccessDeniedHandler;
@@ -33,6 +34,12 @@ public class WebConfig {
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	
+        .headers(headers ->
+        headers.xssProtection(
+                xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
+        ).contentSecurityPolicy(
+                cps -> cps.policyDirectives("default-src 'self'; script-src 'self'; style-src 'self'")
+        ))
 		      .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
 					@Override
 					public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -40,8 +47,22 @@ public class WebConfig {
 						config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
 						config.setAllowedMethods(Collections.singletonList("*"));
 						config.setAllowCredentials(true);
-						config.setAllowedHeaders(Collections.singletonList("*"));
-						config.setExposedHeaders(Arrays.asList("Authorization"));
+						//config.setAllowedHeaders(Collections.singletonList("*"));
+						config.setAllowedHeaders(Arrays.asList(
+							    "Authorization",         // for JWT or Basic Auth
+							    "Content-Type",          // for POST, PUT, PATCH body format
+							    "Accept",                // to define accepted response types
+							    "X-Requested-With",      // often used in AJAX requests
+							    "Origin",                // indicates origin of the request
+							    "X-CSRF-Token"           // if CSRF tokens are in use
+							));
+//						config.setExposedHeaders(Arrays.asList("Authorization"));
+						config.setExposedHeaders(Arrays.asList(
+							    "Authorization",         // if you send JWT in response
+							    "Content-Disposition",   // for file downloads (PDF, audio, video, etc.)
+							    "Content-Type",          // e.g., application/json, video/mp4
+							    "X-Request-ID"           // if you use trace IDs or correlation IDs
+							));
 						config.setMaxAge(3600L);
 						return config;
 					}
